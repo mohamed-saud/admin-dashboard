@@ -19,7 +19,7 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <nav className='flex p-4 items-center justify-between'>
+    <nav className='flex p-4 items-center justify-between sticky top-0 bg-background z-10'>
       {/* LEFT */}
       <SidebarTrigger />
       {/* RIGHT */}
