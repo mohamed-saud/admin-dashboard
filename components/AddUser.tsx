@@ -1,12 +1,14 @@
 'use client';
+
 import {
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -15,10 +17,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from './ui/form';
+import { Input } from './ui/input';
 import {
   Select,
   SelectContent,
@@ -26,39 +26,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Button } from './ui/button';
 
 const formSchema = z.object({
   fullName: z
     .string()
-    .min(3, { message: 'full name must be least 2 characters! ' })
-    .max(20),
-  email: z.string().email({ message: 'Invalid email address' }),
+    .min(2, { message: 'Full name must be at least 2 characters!' })
+    .max(50),
+  email: z.string().email({ message: 'Invalid email address!' }),
   phone: z.string().min(10).max(15),
   address: z.string().min(2),
-  role: z.enum(['user', 'admin']),
+  city: z.string().min(2),
 });
-export default function EditUser() {
+
+const AddUser = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      fullName: 'johan.doe',
-      email: 'johan.doe@gmail.com',
-      phone: '0123456789',
-      address: 'Cairo, Egypt',
-      role: 'user',
-    },
   });
-  function onSubmit(data: z.infer<typeof formSchema>) {}
-
   return (
     <SheetContent>
       <SheetHeader>
-        <SheetTitle className='mb-4'>Are you absolutely sure?</SheetTitle>
-        <SheetDescription>
+        <SheetTitle className='mb-4'>Add User</SheetTitle>
+        <SheetDescription asChild>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className='space-y-6'>
+            <form className='space-y-8'>
               <FormField
                 control={form.control}
                 name='fullName'
@@ -66,14 +57,9 @@ export default function EditUser() {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder='Full Name'
-                        {...field}
-                      />
+                      <Input {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is your public username
-                    </FormDescription>
+                    <FormDescription>Enter user full name.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -85,13 +71,10 @@ export default function EditUser() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder='shadcn'
-                        {...field}
-                      />
+                      <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      Only admin can see your email
+                      Only admin can see your email.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -104,13 +87,10 @@ export default function EditUser() {
                   <FormItem>
                     <FormLabel>Phone</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder='phone'
-                        {...field}
-                      />
+                      <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      Only admin can see your phone
+                      Only admin can see your phone number (optional)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -121,15 +101,12 @@ export default function EditUser() {
                 name='address'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Address</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder='Address'
-                        {...field}
-                      />
+                      <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is ths public location
+                      Enter user address (optional)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -137,23 +114,15 @@ export default function EditUser() {
               />
               <FormField
                 control={form.control}
-                name='role'
+                name='city'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>City</FormLabel>
                     <FormControl>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder='Role' />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value='user'>User</SelectItem>
-                          <SelectItem value='admin'>Admin</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      Only verified admin can change user role
+                      Enter user city (optional)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -166,4 +135,6 @@ export default function EditUser() {
       </SheetHeader>
     </SheetContent>
   );
-}
+};
+
+export default AddUser;

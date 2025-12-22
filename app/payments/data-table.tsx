@@ -62,11 +62,10 @@ export function DataTable<TData, TValue>({
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
-      columnVisibility,
       rowSelection,
     },
   });
+  console.log(rowSelection);
   return (
     <div className='w-full'>
       <div className='flex items-center py-4'>
